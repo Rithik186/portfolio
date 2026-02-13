@@ -114,34 +114,34 @@ const GALLERY_ITEMS = [
 // Infinite Menu Items (Achievements / Tech Stack)
 const MENU_ITEMS = [
   {
-    image: 'https://picsum.photos/seed/achieve1/600/600?grayscale',
+    image: 'https://blog.jobzella.com/wp-content/uploads/2024/06/software-developer-6521720_1280.jpg',
     link: '#',
-    title: 'SIH Finalist',
-    description: 'Smart India Hackathon 2023'
+    title: 'Software Developer',
+    description: 'Passionate about building ideas into real and impactful solutions.'
   },
   {
-    image: 'https://picsum.photos/seed/achieve2/600/600?grayscale',
+    image: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSkHRCG7QdyGJyJTg7y1KGuduUMAv8N8XHDhw&s',
     link: '#',
-    title: 'HackWinner',
-    description: '1st Place @ DevJam'
+    title: 'Hackathon Finalist',
+    description: 'Finalist in national-level hackathons with strong teamwork and problem-solving skills.'
   },
   {
-    image: 'https://picsum.photos/seed/achieve3/600/600?grayscale',
+    image: 'https://miro.medium.com/0*vOaWDgTmVpMfi9ws',
     link: '#',
-    title: 'Open Source',
-    description: 'Top Contributor 2024'
+    title: 'Vibe Coding',
+    description: 'Love experimenting, building, and coding with creativity and flow.'
   },
   {
-    image: 'https://picsum.photos/seed/achieve4/600/600?grayscale',
+    image: 'https://img.freepik.com/free-photo/futuristic-adult-virtual-reality-handsfree-headset-generated-by-ai_188544-26034.jpg?semt=ais_user_personalization&w=740&q=80',
     link: '#',
-    title: 'Tech Lead',
-    description: 'GDSC Core Team'
+    title: 'Gaming & Content',
+    description: 'Enjoy gaming, storytelling, and creating engaging digital content.'
   },
   {
-    image: 'https://picsum.photos/seed/achieve5/600/600?grayscale',
+    image: 'https://cdn.dribbble.com/userupload/5352885/file/original-f25604556e01d7efa6466ef0be1ff0e0.jpeg?crop=96x282-1504x1339&format=webp&resize=400x300&vertical=center',
     link: '#',
-    title: 'IoT Expert',
-    description: 'Certified Specialist'
+    title: 'Creative Mind',
+    description: 'Into drawing, music, and visual design for inspiration and balance.'
   }
 ];
 
@@ -542,7 +542,7 @@ export default function Portfolio() {
 
               <div className="md:col-span-2 bg-white/5 rounded-3xl p-8 border border-white/10 backdrop-blur-sm">
                 <h4 className="text-2xl font-bold text-white mb-2">Location</h4>
-                <p className="text-white/60 mb-6">Based in San Francisco, working globally.</p>
+                <p className="text-white/60 mb-6">Coimbatore, Tamil Nadu, India.</p>
                 <div className="flex items-center gap-3 text-sm font-mono text-[#6366f1] bg-[#6366f1]/10 px-4 py-2 rounded-lg w-max border border-[#6366f1]/20">
                   <div className="w-2 h-2 rounded-full bg-[#6366f1] animate-pulse" />
                   OPEN FOR OPPORTUNITIES
