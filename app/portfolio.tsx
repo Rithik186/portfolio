@@ -3,7 +3,7 @@
 import React, { useEffect, useRef, useState, useLayoutEffect } from "react";
 import { motion } from "framer-motion";
 import {
-  Github, Linkedin, Mail, Zap, Trophy, Flame, Layout, ExternalLink,
+  Github, Linkedin, Mail, Youtube, Zap, Trophy, Flame, Layout, ExternalLink,
   Code2, Cpu, Shield, FolderOpen, Terminal, Sparkles, Layers,
   Database, Server, Globe, Lock, Workflow, Box
 } from "lucide-react";
@@ -41,7 +41,8 @@ import SpotlightCard from '../REACT-BITS/Components/SpotlightCard';
 const CONFIG = {
   EMAIL: "rithikkannaa@gmail.com",
   GITHUB: "https://github.com/Rithik186",
-  LINKEDIN: "https://linkedin.com/in/rithikkannaa",
+  LINKEDIN: "https://www.linkedin.com/in/rithikkannaa-k",
+  YOUTUBE: "https://www.youtube.com/@rkgamingyt5935",
 };
 
 /* ------------------ DATA ------------------ */
@@ -53,19 +54,19 @@ const PROJECTS = [
     tags: ["React", "Firebase", "Realtime DB", "GSAP"],
     accent: "#6366f1", // Indigo
     icon: Gavel,
-    github: CONFIG.GITHUB,
+    github: "https://github.com/Rithik186/IPL-AUCTION-GAME",
     demo: "https://bidbash.netlify.app/",
     featured: true
   },
   {
-    title: "AgroChain AI",
+    title: "AgroChain",
     subtitle: "Smart Agriculture Ecosystem",
     description: "Blockchain-backed marketplace connecting farmers directly to consumers, powered by AI crop disease detection.",
     tags: ["Blockchain", "AI/ML", "Flutter", "Solidity"],
     accent: "#10b981", // Emerald
     icon: Leaf,
-    github: CONFIG.GITHUB,
-    demo: "#",
+    github: "https://github.com/Rithik186/F2c_final",
+    demo: "https://farmer2consumer.netlify.app/",
     featured: true
   },
   {
@@ -75,8 +76,8 @@ const PROJECTS = [
     tags: ["IoT", "Embedded C++", "Flutter", "GSM"],
     accent: "#f59e0b", // Amber
     icon: Lock,
-    github: CONFIG.GITHUB,
-    demo: "#",
+    github: null,
+    demo: null,
     featured: false
   },
   {
@@ -86,8 +87,8 @@ const PROJECTS = [
     tags: ["Three.js", "React Three Fiber", "WebGL"],
     accent: "#ec4899", // Pink
     icon: Car,
-    github: CONFIG.GITHUB,
-    demo: "#",
+    github: "https://github.com/Rithik186/ELITE",
+    demo: null,
     featured: false
   }
 ];
@@ -261,6 +262,7 @@ export default function Portfolio() {
                 {[
                   { icon: Github, href: CONFIG.GITHUB },
                   { icon: Linkedin, href: CONFIG.LINKEDIN },
+                  { icon: Youtube, href: CONFIG.YOUTUBE },
                   { icon: Mail, href: `mailto:${CONFIG.EMAIL}` }
                 ].map((social, i) => (
                   <Magnet key={i} magnetStrength={3}>
@@ -334,12 +336,16 @@ export default function Portfolio() {
                       <project.icon size={28} className="text-white" />
                     </div>
                     <div className="flex gap-2">
-                      <a href={project.github} target="_blank" className="p-3 rounded-full bg-white/5 hover:bg-white/10 text-white/60 hover:text-white transition-colors">
-                        <Github size={20} />
-                      </a>
-                      <a href={project.demo} target="_blank" className="p-3 rounded-full bg-white/5 hover:bg-white/10 text-white/60 hover:text-white transition-colors">
-                        <ExternalLink size={20} />
-                      </a>
+                      {project.github && (
+                        <a href={project.github} target="_blank" className="p-3 rounded-full bg-white/5 hover:bg-white/10 text-white/60 hover:text-white transition-colors">
+                          <Github size={20} />
+                        </a>
+                      )}
+                      {project.demo && (
+                        <a href={project.demo} target="_blank" className="p-3 rounded-full bg-white/5 hover:bg-white/10 text-white/60 hover:text-white transition-colors">
+                          <ExternalLink size={20} />
+                        </a>
+                      )}
                     </div>
                   </div>
 
@@ -503,6 +509,7 @@ export default function Portfolio() {
                   {[
                     { icon: Github, href: CONFIG.GITHUB },
                     { icon: Linkedin, href: CONFIG.LINKEDIN },
+                    { icon: Youtube, href: CONFIG.YOUTUBE },
                     { icon: Mail, href: `mailto:${CONFIG.EMAIL}` }
                   ].map((social, i) => (
                     <a
@@ -547,14 +554,14 @@ export default function Portfolio() {
                 <ul className="space-y-4">
                   <li><a href={CONFIG.GITHUB} target="_blank" className="text-lg text-white/60 hover:text-white transition-colors">GitHub</a></li>
                   <li><a href={CONFIG.LINKEDIN} target="_blank" className="text-lg text-white/60 hover:text-white transition-colors">LinkedIn</a></li>
-                  <li><a href="#" className="text-lg text-white/60 hover:text-white transition-colors">Twitter</a></li>
+                  <li><a href={CONFIG.YOUTUBE} target="_blank" className="text-lg text-white/60 hover:text-white transition-colors">YouTube</a></li>
                 </ul>
               </div>
 
-              <div className="md:col-span-2 bg-white/5 rounded-3xl p-8 border border-white/10 backdrop-blur-sm">
+              <div className="col-span-2 md:col-span-2 bg-white/5 rounded-3xl p-8 border border-white/10 backdrop-blur-sm">
                 <h4 className="text-2xl font-bold text-white mb-2">Location</h4>
                 <p className="text-white/60 mb-6">Coimbatore, Tamil Nadu, India.</p>
-                <div className="flex items-center gap-3 text-sm font-mono text-[#6366f1] bg-[#6366f1]/10 px-4 py-2 rounded-lg w-max border border-[#6366f1]/20">
+                <div className="flex items-center gap-3 text-sm font-mono text-[#6366f1] bg-[#6366f1]/10 px-4 py-2 rounded-lg w-full sm:w-max border border-[#6366f1]/20">
                   <div className="w-2 h-2 rounded-full bg-[#6366f1] animate-pulse" />
                   OPEN FOR OPPORTUNITIES
                 </div>
