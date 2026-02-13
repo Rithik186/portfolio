@@ -2,503 +2,568 @@
 
 import React, { useEffect, useRef, useState, useLayoutEffect } from "react";
 import { motion } from "framer-motion";
-import { Github, Linkedin, Mail, Sun, Moon } from "lucide-react";
-import { SkillsChart } from "./skills-chart"; // Import your SkillsChart component
+import {
+  Github, Linkedin, Mail, Zap, Trophy, Flame, Layout, ExternalLink,
+  Code2, Cpu, Shield, FolderOpen, Terminal, Sparkles, Layers,
+  Database, Server, Globe, Lock, Workflow, Box
+} from "lucide-react";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
+
+// REACT-BITS Imports - Premium Collection
 import GlareHover from '../REACT-BITS/Animations/GlareHover';
+import Magnet from '../REACT-BITS/Animations/Magnet';
+import StarBorder from '../REACT-BITS/Animations/StarBorder';
+import ShinyText from '../REACT-BITS/Text-animations/ShinyText';
+import AnimatedContent from '../REACT-BITS/Animations/AnimatedContent';
+import FadeContent from '../REACT-BITS/Animations/FadeContent';
+import BlobCursor from '../REACT-BITS/Animations/BlobCursor';
+import BlurText from '../REACT-BITS/Text-animations/BlurText';
+import TrueFocus from '../REACT-BITS/Text-animations/TrueFocus';
+import ClickSpark from '../REACT-BITS/Animations/ClickSpark';
+import DecryptedText from '../REACT-BITS/Text-animations/DecryptedText';
+import ScrollStack, { ScrollStackItem } from '../REACT-BITS/Components/ScrollStack';
+
+// NEW IMPORTS
+import PillNav from '../REACT-BITS/Components/PillNav';
+import MagicBento from '../REACT-BITS/Components/MagicBento';
+import CircularGallery from '../REACT-BITS/Components/CircularGallery';
+import LogoLoop from '../REACT-BITS/Animations/LogoLoop';
+import InfiniteMenu from '../REACT-BITS/Components/InfiniteMenu';
 import DarkVeil from '../REACT-BITS/Background/DarkVeil';
+import ScrollReveal from '../REACT-BITS/Text-animations/ScrollReveal';
+import RotatingText from '../REACT-BITS/Text-animations/RotatingText';
+import GlitchText from '../REACT-BITS/Text-animations/GlitchText';
+import FlowingMenu from '../REACT-BITS/Components/FlowingMenu';
+import SpotlightCard from '../REACT-BITS/Components/SpotlightCard';
 
-/* ------------------ Typing animation ------------------ */
-function Typing({
-  strings,
-  speed = 60,
-  backSpeed = 30,
-  loop = true,
-  className = "",
-}: {
-  strings: string[];
-  speed?: number;
-  backSpeed?: number;
-  loop?: boolean;
-  className?: string;
-}) {
-  const [text, setText] = useState("");
-  const [si, setSi] = useState(0);
-  const [pos, setPos] = useState(0);
-  const [deleting, setDeleting] = useState(false);
+/* ------------------ CONFIG ------------------ */
+const CONFIG = {
+  EMAIL: "rithikkannaa@gmail.com",
+  GITHUB: "https://github.com/Rithik186",
+  LINKEDIN: "https://linkedin.com/in/rithikkannaa",
+};
 
-  useEffect(() => {
-    const current = strings[si] ?? "";
-    const timeout = setTimeout(() => {
-      if (!deleting) {
-        setText(current.slice(0, pos + 1));
-        setPos((p) => p + 1);
-        if (pos + 1 === current.length) setDeleting(true);
-      } else {
-        setText(current.slice(0, pos - 1));
-        setPos((p) => p - 1);
-        if (pos - 1 === 0) {
-          setDeleting(false);
-          setSi((s) => (s + 1 >= strings.length ? (loop ? 0 : s) : s + 1));
-        }
-      }
-    }, deleting ? backSpeed : speed);
-    return () => clearTimeout(timeout);
-  }, [si, pos, deleting, strings, speed, backSpeed, loop]);
+/* ------------------ DATA ------------------ */
+const PROJECTS = [
+  {
+    title: "Bid Bash League",
+    subtitle: "Realtime IPL Auction Engine",
+    description: "High-performance auction simulation with WebSocket-based bidding, dynamic player sets, and live synchronized rooms.",
+    tags: ["React", "Firebase", "Realtime DB", "GSAP"],
+    accent: "#6366f1", // Indigo
+    icon: Gavel,
+    github: CONFIG.GITHUB,
+    demo: "https://bidbash.netlify.app/",
+    featured: true
+  },
+  {
+    title: "AgroChain AI",
+    subtitle: "Smart Agriculture Ecosystem",
+    description: "Blockchain-backed marketplace connecting farmers directly to consumers, powered by AI crop disease detection.",
+    tags: ["Blockchain", "AI/ML", "Flutter", "Solidity"],
+    accent: "#10b981", // Emerald
+    icon: Leaf,
+    github: CONFIG.GITHUB,
+    demo: "#",
+    featured: true
+  },
+  {
+    title: "SecureBox IoT",
+    subtitle: "Anti-Tamper Delivery System",
+    description: "Hardware-software solution featuring biometric locking, GSM tracking, and real-time tamper alerts.",
+    tags: ["IoT", "Embedded C++", "Flutter", "GSM"],
+    accent: "#f59e0b", // Amber
+    icon: Lock,
+    github: CONFIG.GITHUB,
+    demo: "#",
+    featured: false
+  },
+  {
+    title: "Elite Showroom",
+    subtitle: "3D Interactive Experience",
+    description: "WebGL-powered car configurator with cinematic lighting and physics-based interactions.",
+    tags: ["Three.js", "React Three Fiber", "WebGL"],
+    accent: "#ec4899", // Pink
+    icon: Car,
+    github: CONFIG.GITHUB,
+    demo: "#",
+    featured: false
+  }
+];
 
-  return (
-    <span className={className}>
-      {text}
-      <span className="inline-block ml-1 w-[8px] h-[20px] align-middle animate-blink bg-current" />
-      <style jsx>{`
-        @keyframes blink {
-          0%, 100% { opacity: 1; }
-          50% { opacity: 0; }
-        }
-        .animate-blink {
-          animation: blink 1s step-end infinite;
-        }
-      `}</style>
-    </span>
-  );
-}
+// Helper Icons
+function Gavel(props: any) { return <Zap {...props} /> }
+function Leaf(props: any) { return <Globe {...props} /> }
+function Car(props: any) { return <Box {...props} /> }
 
-/* ------------------ Portfolio Component ------------------ */
+// Skill Gallery Items (for CircularGallery)
+const GALLERY_ITEMS = [
+  { image: `https://cdn.simpleicons.org/react/white`, text: 'React' },
+  { image: `https://cdn.simpleicons.org/nextdotjs/white`, text: 'Next.js' },
+  { image: `https://cdn.simpleicons.org/typescript/white`, text: 'TypeScript' },
+  { image: `https://cdn.simpleicons.org/nodedotjs/white`, text: 'Node.js' },
+  { image: `https://cdn.simpleicons.org/threedotjs/white`, text: 'Three.js' },
+  { image: `https://cdn.simpleicons.org/amazonaws/white`, text: 'AWS' },
+  { image: `https://cdn.simpleicons.org/docker/white`, text: 'Docker' },
+  { image: `https://cdn.simpleicons.org/firebase/white`, text: 'Firebase' },
+  { image: `https://cdn.simpleicons.org/flutter/white`, text: 'Flutter' },
+  { image: `https://cdn.simpleicons.org/python/white`, text: 'Python' }
+];
+
+// Infinite Menu Items (Achievements / Tech Stack)
+const MENU_ITEMS = [
+  {
+    image: 'https://picsum.photos/seed/achieve1/600/600?grayscale',
+    link: '#',
+    title: 'SIH Finalist',
+    description: 'Smart India Hackathon 2023'
+  },
+  {
+    image: 'https://picsum.photos/seed/achieve2/600/600?grayscale',
+    link: '#',
+    title: 'HackWinner',
+    description: '1st Place @ DevJam'
+  },
+  {
+    image: 'https://picsum.photos/seed/achieve3/600/600?grayscale',
+    link: '#',
+    title: 'Open Source',
+    description: 'Top Contributor 2024'
+  },
+  {
+    image: 'https://picsum.photos/seed/achieve4/600/600?grayscale',
+    link: '#',
+    title: 'Tech Lead',
+    description: 'GDSC Core Team'
+  },
+  {
+    image: 'https://picsum.photos/seed/achieve5/600/600?grayscale',
+    link: '#',
+    title: 'IoT Expert',
+    description: 'Certified Specialist'
+  }
+];
+
 export default function Portfolio() {
-  const aboutRef = useRef<HTMLElement | null>(null);
-  const skillsRef = useRef<HTMLElement | null>(null);
-  const projectsRef = useRef<HTMLElement | null>(null);
-  const githubRef = useRef<HTMLElement | null>(null);
-  const contactRef = useRef<HTMLElement | null>(null);
-  const skillIconsRef = useRef<HTMLImageElement | null>(null);
-  const skillsChartRef = useRef<HTMLDivElement | null>(null);
+  const [mounted, setMounted] = useState(false);
+  const [activeSection, setActiveSection] = useState('#hero');
+  const scrollRef = useRef<HTMLDivElement>(null);
 
-  const scrollTo = (el: HTMLElement | null) =>
-    el?.scrollIntoView({ behavior: "smooth" });
-
-  const [theme, setTheme] = useState<"dark" | "light">(() => {
-    if (typeof window === "undefined") return "dark";
-    return (localStorage.getItem("rk_theme") as "dark" | "light") || "dark";
-  });
-
-  useEffect(() => {
-    document.documentElement.classList.toggle("dark", theme === "dark");
-    localStorage.setItem("rk_theme", theme);
-  }, [theme]);
-
-  const isDark = theme === "dark";
-  const [sending, setSending] = useState(false);
+  // Section Refs
+  const sections: { [key: string]: React.RefObject<HTMLElement | null> } = {
+    hero: useRef<HTMLElement>(null),
+    about: useRef<HTMLElement>(null),
+    work: useRef<HTMLElement>(null),
+    tech: useRef<HTMLElement>(null),
+    contact: useRef<HTMLElement>(null),
+  };
 
   useLayoutEffect(() => {
+    setMounted(true);
     gsap.registerPlugin(ScrollTrigger);
+    ScrollTrigger.refresh();
+    return () => {
+      ScrollTrigger.getAll().forEach(t => t.kill());
+    };
+  }, []);
 
-    // Animation for Skill Icons
-    if (skillIconsRef.current) {
-      gsap.fromTo(
-        skillIconsRef.current,
-        { opacity: 0, y: 50, scale: 0.8 },
-        {
-          opacity: 1,
-          y: 0,
-          scale: 1,
-          duration: 1,
-          ease: "power3.out",
-          scrollTrigger: {
-            trigger: skillIconsRef.current,
-            start: "top 80%",
-            end: "bottom 20%",
-            toggleActions: "play none none reverse",
-          },
+  // Simple Scroll Spy
+  useEffect(() => {
+    const handleScroll = () => {
+      const scrollPosition = window.scrollY + 300; // Offset better for highlighting
+      for (const key in sections) {
+        const element = sections[key].current;
+        if (element) {
+          const { offsetTop, offsetHeight } = element;
+          if (scrollPosition >= offsetTop && scrollPosition < offsetTop + offsetHeight) {
+            setActiveSection(`#${key}`);
+          }
         }
-      );
-    }
+      }
+    };
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
 
-    // Animation for Skills Chart
-    if (skillsChartRef.current) {
-      gsap.fromTo(
-        skillsChartRef.current.children,
-        { opacity: 0, y: 20 },
-        {
-          opacity: 1,
-          y: 0,
-          duration: 0.6,
-          ease: "power2.out",
-          stagger: 0.1,
-          scrollTrigger: {
-            trigger: skillsChartRef.current,
-            start: "top 80%",
-            end: "bottom 20%",
-            toggleActions: "play none none reverse",
-          },
-        }
-      );
-    }
-  }, [isDark]);
+  const scrollTo = (key: keyof typeof sections) => {
+    sections[key].current?.scrollIntoView({ behavior: "smooth" });
+  };
 
-  const bgAccent =
-    "bg-gradient-to-r from-emerald-500 to-lime-600 hover:from-lime-600 hover:to-emerald-500";
-
-  const PROJECTS = [
-    {
-      title: "AgroChain",
-      description:
-        "Farmer-to-Consumer platform with UPI payments, AI crop suggestions, and blockchain transparency.",
-      tags: ["Blockchain", "AI", "UPI"],
-      githubUrl: "https://github.com/Rithik186",
-      demoUrl: "#",
-    },
-    {
-      title: "IoT Anti-Tampering Delivery Box",
-      description:
-        "Smart box with OTP Flutter app access, GSM alerts, and tamper detection sensors.",
-      tags: ["Flutter", "IoT", "Arduino"],
-      githubUrl: "https://github.com/Rithik186",
-      demoUrl: "#",
-    },
-    {
-      title: "Cross-Platform File Sharing App",
-      description:
-        "Secure Android/iOS app with Firebase auth, real-time transfers, and notifications.",
-      tags: ["Flutter", "Firebase", "Dart"],
-      githubUrl: "https://github.com/Rithik186",
-      demoUrl: "#",
-    },
-    {
-      title: "WiFi Controlled Robot Car",
-      description:
-        "ESP8266 + L298N robot; Flutter controller with speed control, lights, horn, OTA updates & lock.",
-      tags: ["ESP8266", "Flutter", "IoT"],
-      githubUrl: "https://github.com/Rithik186",
-      demoUrl: "#",
-    },
-    {
-      title: "Elite Car Showroom Website",
-      description:
-        "React + Tailwind modern showcase of premium cars and specs.",
-      tags: ["React", "Tailwind"],
-      githubUrl: "https://github.com/Rithik186",
-      demoUrl: "#",
-    },
-    {
-      title: "IPL Auction Game App",
-      description:
-        "Multiplayer auction simulator for Android & iOS with rooms, live chat, voice features, and animations.",
-      tags: ["Flutter", "Realtime"],
-      githubUrl: "https://github.com/Rithik186",
-      demoUrl: "#",
-    },
-  ];
-
-  const SKILL_ICONS_URL =
-    "https://skillicons.dev/icons?i=python,java,cpp,dart,javascript,flutter,react,html,css,tailwind,nodejs,express,firebase,arduino,vscode,github,git,androidstudio";
-
-  const skillsData = [
-    { name: "React", value: 85 },
-    { name: "Flutter", value: 90 },
-    { name: "NodeJS", value: 70 },
-    { name: "Python", value: 80 },
-    { name: "Arduino", value: 95 },
-    { name: "Firebase", value: 85 },
-  ];
+  if (!mounted) return null;
 
   return (
-    <div className="relative min-h-screen">
-      <div className="absolute inset-0 z-0">
-      </div>
-      <div
-        className={`relative z-10 min-h-screen ${
-          isDark
-            ? "bg-gradient-to-b from-[#050505] via-[#0a0a0f] to-[#101018] text-neutral-100"
-            : "bg-gray-100 text-gray-900"
-        } transition-colors duration-500`}
-      >
-        {/* NAVBAR */}
-        <header className={`fixed top-0 left-0 w-full z-50 backdrop-blur ${isDark ? "bg-black/40 border-b border-emerald-700/30" : "bg-white/80 border-b border-gray-200"}`}>
-          <div className="max-w-6xl mx-auto flex items-center justify-between px-4 py-3">
-            <button
-              onClick={() => scrollTo(aboutRef.current)}
-              className={`${isDark ? "text-lg font-bold text-emerald-400 hover:text-lime-400" : "text-lg font-bold text-green-600 hover:text-lime-800"} transition`}
-            >
-              Rithik Kannaa K
-            </button>
-            <nav className={`hidden md:flex items-center gap-6 text-sm ${isDark ? "text-neutral-300" : "text-gray-700"}`}>
-              {
-                (
-                  [
-                    ["About", aboutRef],
-                    ["Skills", skillsRef],
-                    ["Projects", projectsRef],
-                    ["GitHub", githubRef],
-                    ["Contact", contactRef],
-                  ] as [string, React.RefObject<HTMLElement | null>][]
-                ).map(([label, ref], i) => (
-                  <button
-                    key={i}
-                    onClick={() => scrollTo((ref as any).current)}
-                    className={`${isDark ? "hover:text-emerald-400" : "hover:text-green-600"} transition`}
-                  >
-                    {label}
-                  </button>
-                ))
-              }
-            </nav>
-            <div className="flex items-center gap-3">
-              <button
-                onClick={() => setTheme(isDark ? "light" : "dark")}
-                className={`p-2 rounded-md ${isDark ? "hover:bg-emerald-700/20" : "hover:bg-green-100"} transition`}
-                aria-label="toggle-theme"
-              >
-                {isDark ? <Sun size={18} /> : <Moon size={18} />}
-              </button>
-              <a
-                href="mailto:rithikkannaa@gmail.com"
-                className={`hidden md:inline-flex items-center gap-2 px-3 py-2 rounded-md ${bgAccent} text-white font-semibold shadow-md transition`}
-              >
-                <Mail size={16} />
-                Contact
-              </a>
-            </div>
+    <ClickSpark sparkColor="#6366f1" sparkCount={8} sparkRadius={20}>
+      <div ref={scrollRef} className="relative w-full min-h-screen bg-[#030303] text-[#eef2f6] selection:bg-[#6366f1]/30 selection:text-[#6366f1] overflow-x-hidden font-sans">
+
+        {/* --- DYNAMIC BACKGROUND: DARK VEIL --- */}
+        <div className="fixed inset-0 z-0 pointer-events-none opacity-60">
+          <DarkVeil />
+        </div>
+
+        {/* --- PILL NAVIGATION --- */}
+        <div className="fixed top-6 left-0 w-full z-50 flex justify-center pointer-events-none">
+          <div className="pointer-events-auto transform scale-110">
+            {/* scale-110 to slightly increase size as requested */}
+            <PillNav
+              logo="https://github.com/Rithik186.png"
+              logoAlt="Rithik"
+              items={[
+                { label: 'Home', href: '#hero', ariaLabel: 'Home' },
+                { label: 'About', href: '#about', ariaLabel: 'About' },
+                { label: 'Work', href: '#work', ariaLabel: 'Work' },
+                { label: 'Tech', href: '#tech', ariaLabel: 'Tech' },
+                { label: 'Contact', href: '#contact', ariaLabel: 'Contact' },
+              ]}
+              onMobileMenuClick={() => { }}
+              pillColor="#ffffff"
+              baseColor="#000000"
+              hoveredPillTextColor="#6366f1"
+              pillTextColor="#000000"
+              activeHref={activeSection}
+            />
           </div>
-        </header>
+        </div>
 
-        {/* HERO */}
-        <main className="pt-24">
-          <section className="min-h-[70vh] flex items-center">
-            <div className="max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-10 px-4 items-center">
-              <motion.div
-                initial={{ opacity: 0, x: -30 }}
-                animate={{ opacity: 1, x: 0 }}
-                transition={{ duration: 0.7 }}
-                className="space-y-6"
+        {/* --- HERO SECTION --- */}
+        <section id="hero" ref={sections.hero} className="relative min-h-screen flex flex-col items-center justify-center px-6 pt-20">
+          <div className="text-center space-y-8 relative z-10 max-w-6xl">
+            <div className="relative w-full mb-8">
+              <ScrollReveal
+                baseOpacity={0}
+                enableBlur={true}
+                baseRotation={5}
+                blurStrength={10}
+                rotationStrength={10}
+                containerClassName="inline-block"
               >
-                <h1 className="text-4xl sm:text-5xl font-extrabold leading-tight">
-                  <Typing
-                    strings={[
-                      "Hello — I'm Rithik Kannaa K.",
-                      "I build intelligent, secure IoT & AI systems.",
-                    ]}
-                    className={`${isDark ? "text-emerald-400" : "text-green-600"}`}
-                  />
+                <h1 className="text-6xl md:text-8xl lg:text-9xl font-black leading-none tracking-tighter text-white text-center">
+                  RITHIK KANNAA
                 </h1>
-                <p className={`${isDark ? "text-neutral-400" : "text-gray-700"} max-w-xl`}>
-                  Passionate about building futuristic solutions that blend AI,
-                  IoT, and mobile development with cybersecurity principles.
-                </p>
-              </motion.div>
-              {/* Quick Facts */}
-              <div style={{ height: 'auto', position: 'relative' }}>
-                <GlareHover
-                  glareColor="#ffffff"
-                  glareOpacity={0.3}
-                  glareAngle={-30}
-                  glareSize={300}
-                  transitionDuration={800}
-                  playOnce={false}
-                >
-                  <motion.div
-                    initial={{ opacity: 0, x: 30 }}
-                    animate={{ opacity: 1, x: 0 }}
-                    transition={{ duration: 0.7, delay: 0.2 }}
-                    className={`rounded-2xl p-6 ${isDark ? "border border-emerald-800/40 bg-black/40 backdrop-blur shadow-lg" : "border border-green-200 bg-white/80 shadow-md"}`}
-                  >
-                    <h3 className={`text-lg font-semibold ${isDark ? "text-emerald-400" : "text-green-600"} mb-3`}>
-                      Quick Facts
-                    </h3>
-                    <ul className={`${isDark ? "text-neutral-400" : "text-gray-700"} space-y-3`}>
-                      <li>IoT · Flutter · AI · Cybersecurity</li>
-                      <li>Stack: React, Node, ESP8266, Firebase</li>
-                      <li>Focus: Secure, real-world innovation</li>
-                      <li>Gaming YouTuber & 3D Designer</li>
-                    </ul>
-                  </motion.div>
-                </GlareHover>
+              </ScrollReveal>
+            </div>
+
+            <FadeContent delay={800} blur={true}>
+              <p className="text-xl md:text-2xl font-light text-white/60 tracking-wide max-w-2xl mx-auto">
+                Architecting Next-Gen IoT & Scalable Web Systems
+              </p>
+
+              <div className="flex items-center gap-6 mt-8">
+                {[
+                  { icon: Github, href: CONFIG.GITHUB },
+                  { icon: Linkedin, href: CONFIG.LINKEDIN },
+                  { icon: Mail, href: `mailto:${CONFIG.EMAIL}` }
+                ].map((social, i) => (
+                  <Magnet key={i} magnetStrength={3}>
+                    <a
+                      href={social.href}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="p-4 rounded-full border border-white/5 bg-white/[0.02] hover:bg-white/10 hover:border-white/20 hover:scale-110 transition-all duration-300 group"
+                    >
+                      <social.icon size={32} className="text-white/60 group-hover:text-white transition-colors" />
+                    </a>
+                  </Magnet>
+                ))}
               </div>
-            </div>
-          </section>
+            </FadeContent>
+          </div>
+        </section>
 
-          {/* EXECUTIVE SUMMARY */}
-          <section ref={aboutRef} className="py-16 px-6 max-w-5xl mx-auto">
-            <motion.h2
-              initial={{ opacity: 0, y: 10 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              className={`${isDark ? "text-3xl font-semibold text-emerald-400" : "text-3xl font-semibold text-green-600"} mb-6`}
-            >
-              Executive Summary
-            </motion.h2>
-            <motion.p
-              initial={{ opacity: 0 }}
-              whileInView={{ opacity: 1 }}
-              className={`${isDark ? "text-neutral-300" : "text-gray-700"} leading-relaxed`}
-            >
-              I'm <span className={`${isDark ? "text-emerald-400" : "text-green-600"}`}>Rithik Kannaa K</span>, a
-              developer specialized in IoT, Flutter, and web development using
-              React and Firebase. I love crafting intelligent systems that merge
-              hardware with modern software frameworks. Currently, I’m expanding
-              into AI and Cybersecurity, integrating smart, secure decision-making
-              into my IoT solutions. I’m also a passionate gaming YouTuber and
-              3D designer.
-            </motion.p>
-          </section>
-
-          {/* SKILLS & TOOLS */}
-          <section ref={skillsRef} className={`${isDark ? "bg-black/30" : "bg-gray-200"} py-16`}>
-            <h2 className={`text-center text-3xl font-semibold ${isDark ? "text-emerald-400" : "text-green-600"} mb-8`}>
-              Skills & Tools
+        {/* --- ABOUT & ACHIEVEMENTS (Infinite Menu) --- */}
+        <section id="about" ref={sections.about} className="py-20 relative min-h-screen flex flex-col">
+          <div className="container mx-auto px-6 mb-10">
+            <h2 className="text-4xl md:text-6xl font-black tracking-tighter mb-4 text-center">
+              <ShinyText text="WHO AM I" speed={3} />
             </h2>
-            <div ref={skillIconsRef} className="flex justify-center mb-8">
-              <img
-                src={SKILL_ICONS_URL}
-                alt="skills"
-                className={`rounded-lg shadow-lg hover:scale-105 transition-transform duration-300 ${isDark ? "border border-emerald-800/40" : "border border-green-200"}`}
-              />
-            </div>
+          </div>
+          {/* Infinite Menu for Achievements & Identity */}
+          <div className="flex-1 w-full h-[500px] relative mb-20">
+            <InfiniteMenu items={MENU_ITEMS as any} scale={0.8} />
+          </div>
 
-            {/* Skills Chart */}
-            <div ref={skillsChartRef} className="max-w-4xl mx-auto px-4">
-              <SkillsChart data={skillsData} />
-            </div>
-          </section>
+          {/* About Me Paragraph with ScrollReveal */}
+        </section>
 
-          {/* PROJECTS */}
-          <section ref={projectsRef} className="py-20">
-            <div className="max-w-6xl mx-auto px-4">
-              <motion.h2
-                initial={{ opacity: 0, y: 8 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                className={`${isDark ? "text-3xl font-semibold text-emerald-400" : "text-3xl font-semibold text-green-600"} mb-8`}
-              >
-                Featured Projects
-              </motion.h2>
-              <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-                {PROJECTS.map((p, idx) => (
-                  <motion.article
-                    key={idx}
-                    initial={{ opacity: 0, y: 12 }}
-                    whileInView={{ opacity: 1, y: 0 }}
-                    transition={{ delay: idx * 0.05 }}
-                    className={`rounded-xl p-5 ${isDark ? "bg-black/40 border border-emerald-800/30 hover:border-lime-500/40 hover:shadow-[0_0_20px_#84cc16]" : "bg-white/80 border border-green-200 hover:border-lime-500/40 hover:shadow-[0_0_20px_#65a30d]"} transition-all`}
-                  >
-                    <h3 className={`${isDark ? "text-lg font-semibold text-emerald-300" : "text-lg font-semibold text-green-700"} mb-2`}>
-                      {p.title}
-                    </h3>
-                    <p className={`${isDark ? "text-neutral-400" : "text-gray-700"} mb-4`}>{p.description}</p>
-                    <div className="flex flex-wrap gap-2 mb-4">
-                      {p.tags.map((t) => (
-                        <span
-                          key={t}
-                          className={`${isDark ? "text-xs px-2 py-1 rounded bg-emerald-900/40 text-emerald-200" : "text-xs px-2 py-1 rounded bg-green-100 text-green-700"}`}
-                        >
-                          {t}
+
+        {/* --- TECH STACK (Circular Gallery) --- */}
+        <section id="tech" ref={sections.tech} className="py-32 bg-white/[0.02] overflow-hidden">
+          <div className="container mx-auto px-6 mb-20 text-center">
+            <h2 className="text-4xl md:text-6xl font-black tracking-tighter mb-4">
+              <ShinyText text="ARSENAL" speed={3} />
+            </h2>
+          </div>
+
+          <div className="w-full relative border-y border-white/5 py-8">
+            <LogoLoop
+              logos={GALLERY_ITEMS.map((item) => ({
+                src: item.image,
+                alt: item.text,
+                title: item.text
+              }))}
+            />
+          </div>
+        </section>
+
+        {/* --- PROJECTS (Scroll Stack) --- */}
+        <section id="work" ref={sections.work} className="py-20">
+          <div className="container mx-auto px-6 mb-10">
+            <h2 className="text-5xl md:text-8xl font-black tracking-tighter leading-none mb-4 text-center">
+              SELECTED <span className="text-gradient-primary">WORKS.</span>
+            </h2>
+          </div>
+
+          <div className="w-full max-w-7xl mx-auto px-6">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+              {PROJECTS.map((project, index) => (
+                <SpotlightCard key={index} className="relative overflow-hidden rounded-2xl bg-[#0a0a0a] border border-[#620093]/20 hover:border-[#620093]/60 hover:shadow-[0_0_15px_rgba(98,0,147,0.3)] hover:scale-[1.02] transition-all duration-300 h-full min-h-[300px] flex flex-col p-6 group shadow-lg">
+                  {/* Top Icon & Links */}
+                  <div className="flex justify-between items-start mb-6 z-10">
+                    <div className="p-3 rounded-xl bg-white/5 border border-white/5 backdrop-blur-sm">
+                      <project.icon size={28} className="text-white" />
+                    </div>
+                    <div className="flex gap-2">
+                      <a href={project.github} target="_blank" className="p-3 rounded-full bg-white/5 hover:bg-white/10 text-white/60 hover:text-white transition-colors">
+                        <Github size={20} />
+                      </a>
+                      <a href={project.demo} target="_blank" className="p-3 rounded-full bg-white/5 hover:bg-white/10 text-white/60 hover:text-white transition-colors">
+                        <ExternalLink size={20} />
+                      </a>
+                    </div>
+                  </div>
+
+                  {/* Content */}
+                  <div className="relative z-10 flex-1 flex flex-col justify-end gap-4">
+                    <h3 className="text-3xl font-bold text-white leading-none">{project.title}</h3>
+                    <p className="text-xs font-bold uppercase tracking-widest text-white/40">{project.subtitle}</p>
+                    <p className="text-white/60 leading-relaxed text-sm">{project.description}</p>
+
+                    {/* Tags */}
+                    <div className="flex flex-wrap gap-2 mt-4">
+                      {project.tags.map((tag, i) => (
+                        <span key={i} className="px-3 py-1 rounded-lg bg-white/5 border border-white/5 text-[10px] font-mono text-white/50 uppercase tracking-wider">
+                          {tag}
                         </span>
                       ))}
                     </div>
-                    <div className="flex gap-3">
-                      <a
-                        href={p.githubUrl}
-                        target="_blank"
-                        rel="noreferrer"
-                        className={`px-3 py-2 rounded-md ${isDark ? "border border-emerald-800 hover:border-lime-500 text-emerald-300 hover:text-lime-300" : "border border-green-300 hover:border-lime-500 text-green-700 hover:text-lime-700"} transition-all`}
-                      >
-                        Code
-                      </a>
-                      <a
-                        href={p.demoUrl}
-                        className={`px-3 py-2 rounded-md ${bgAccent} text-white font-semibold transition-all shadow-md`}
-                      >
-                        Demo
-                      </a>
+                  </div>
+                </SpotlightCard>
+              ))}
+            </div>
+          </div>
+        </section>
+
+        {/* --- CODING PROFILE STATS --- */}
+        <section className="py-20 relative bg-[#050505] overflow-hidden">
+          <div className="container mx-auto px-6">
+            <h2 className="text-4xl md:text-6xl font-black tracking-tighter mb-12 text-center text-white/90">
+              <ShinyText text="CODING STATUS" speed={3} />
+            </h2>
+            <div className="flex flex-col gap-8 max-w-7xl mx-auto">
+              <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                {/* GitHub Stats Card */}
+                <div className="bg-[#0a0a0a] border border-white/5 rounded-3xl p-8 relative group hover:border-[#6366f1]/30 transition-all duration-500 flex flex-col gap-6">
+                  <div className="flex justify-between items-center mb-2">
+                    <div className="flex items-center gap-4">
+                      <Github size={32} className="text-white" />
+                      <h3 className="text-2xl font-bold text-white">GitHub Stats</h3>
                     </div>
-                  </motion.article>
-                ))}
+                    <a href="https://github.com/Rithik186" target="_blank" className="text-sm text-[#6366f1] hover:text-[#818cf8] transition-colors flex items-center gap-1">
+                      View Profile <ExternalLink size={14} />
+                    </a>
+                  </div>
+
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div className="bg-[#111] rounded-2xl p-4 border border-white/5">
+                      <img
+                        src="https://github-readme-stats.vercel.app/api?username=Rithik186&show_icons=true&theme=dark&hide_border=true&bg_color=00000000&rank_icon=github&count_private=true"
+                        alt="GitHub Stats"
+                        className="w-full"
+                      />
+                    </div>
+                    <div className="bg-[#111] rounded-2xl p-4 border border-white/5 flex items-center justify-center">
+                      <img
+                        src="https://github-readme-stats.vercel.app/api/top-langs/?username=Rithik186&layout=compact&theme=dark&hide_border=true&bg_color=00000000&hide=jupyter%20notebook"
+                        alt="Top Langs"
+                        className="w-full"
+                      />
+                    </div>
+                  </div>
+
+                  <div className="bg-[#111] rounded-2xl p-6 border border-white/5">
+                    <img
+                      src="https://github-readme-streak-stats.herokuapp.com/?user=Rithik186&theme=dark&hide_border=true&background=00000000&ring=6366f1&currStreakNum=6366f1"
+                      alt="GitHub Streak"
+                      className="w-full h-auto"
+                    />
+                  </div>
+                </div>
+
+                {/* LeetCode Stats Card */}
+                <div className="bg-[#0a0a0a] border border-white/5 rounded-3xl p-8 relative group hover:border-[#f59e0b]/30 transition-all duration-500 flex flex-col gap-6">
+                  <div className="flex justify-between items-center mb-2">
+                    <div className="flex items-center gap-4">
+                      <Code2 size={32} className="text-[#f59e0b]" />
+                      <h3 className="text-2xl font-bold text-white">LeetCode Profile</h3>
+                    </div>
+                    <a href="https://leetcode.com/u/rithik186/" target="_blank" className="text-sm text-[#6366f1] hover:text-[#818cf8] transition-colors flex items-center gap-1">
+                      View Profile <ExternalLink size={14} />
+                    </a>
+                  </div>
+
+                  <div className="flex-1 bg-[#111] rounded-2xl p-6 border border-white/5 flex items-center justify-center">
+                    <img
+                      src="https://leetcode-stats-six.vercel.app/?username=rithik186&theme=dark&no-border=true"
+                      alt="LeetCode Stats"
+                      className="w-full h-auto"
+                    />
+                  </div>
+
+                  <a href="https://leetcode.com/u/rithik186/" target="_blank" className="w-full py-4 bg-[#6366f1] hover:bg-[#5558e6] rounded-xl text-center text-white font-bold uppercase tracking-wider transition-all shadow-[0_0_20px_rgba(99,102,241,0.3)] hover:shadow-[0_0_30px_rgba(99,102,241,0.5)]">
+                    Check My LeetCode
+                  </a>
+                </div>
               </div>
             </div>
-          </section>
+          </div>
+        </section>
 
-          {/* GITHUB STATS */}
-          <section ref={githubRef} className={`${isDark ? "bg-black/30 border-t border-emerald-800/40" : "bg-gray-200 border-t border-gray-300"} py-16`}>
-            <div className="max-w-6xl mx-auto px-4 text-center">
-              <h2 className={`${isDark ? "text-3xl font-semibold text-emerald-400" : "text-3xl font-semibold text-green-600"} mb-8`}>
-                GitHub Insights
+        {/* --- CONTACT --- */}
+        <section id="contact" ref={sections.contact} className="py-40 relative overflow-hidden">
+          <div className="container mx-auto px-6 relative z-10 max-w-4xl text-center">
+            <div className="mb-16">
+              <h2 className="text-6xl md:text-9xl font-black tracking-tighter mb-8">
+                <BlurText
+                  text="READY TO BUILD?"
+                  animateBy="words"
+                  delay={200}
+                  className="text-4xl md:text-6xl font-black tracking-tighter text-white"
+                />
               </h2>
-              <div className="grid gap-6 md:grid-cols-2">
-                <img
-                  src={`https://github-readme-stats.vercel.app/api?username=Rithik186&show_icons=true&theme=${isDark ? "tokyonight" : "light"}&hide_border=true&count_private=true`}
-                  alt="GitHub Stats"
-                  className={`rounded-lg ${isDark ? "border border-emerald-800/40" : "border border-green-200"}`}
-                />
-                <img
-                  src={`https://github-readme-stats.vercel.app/api/top-langs/?username=Rithik186&layout=compact&theme=${isDark ? "tokyonight" : "light"}&hide_border=true`}
-                  alt="Top Languages"
-                  className={`rounded-lg ${isDark ? "border border-emerald-800/40" : "border border-green-200"}`}
-                />
-              </div>
-              <div className="mt-8">
-                <img
-                  src={`https://github-readme-streak-stats.herokuapp.com/?user=Rithik186&theme=${isDark ? "tokyonight" : "light"}&hide_border=true`}
-                  alt="GitHub Streak"
-                  className={`rounded-lg ${isDark ? "border border-emerald-800/40" : "border border-green-200"} mx-auto`}
-                />
-              </div>
+              <p className="text-xl text-white/50 max-w-2xl mx-auto">
+                Looking for a dedicated engineer to bring your visionary projects to life? Let's initialize a connection.
+              </p>
             </div>
-          </section>
 
-          {/* CONTACT */}
-          <section
-            ref={contactRef}
-            className={`${isDark ? "bg-black/40 border-t border-emerald-800/40" : "bg-gray-100 border-t border-gray-300"} py-16`}
-          >
-            <div className="max-w-3xl mx-auto px-4">
-              <h2 className={`${isDark ? "text-2xl font-semibold text-emerald-400" : "text-2xl font-semibold text-green-600"} mb-4`}>
-                Get in Touch
-              </h2>
-              <form
-                onSubmit={(e) => {
-                  e.preventDefault();
-                  setSending(true);
-                  setTimeout(() => {
-                    setSending(false);
-                    alert("Thanks — message received!");
-                  }, 900);
-                }}
-                className={`${isDark ? "space-y-4 bg-black/40 p-6 rounded-md border border-emerald-800/30 backdrop-blur-md" : "space-y-4 bg-white/80 p-6 rounded-md border border-green-200 shadow-md"}`}
+            <Magnet padding={20} magnetStrength={5}>
+              <a
+                href={`mailto:${CONFIG.EMAIL}`}
+                className="inline-flex items-center gap-4 px-12 py-6 rounded-full bg-[#6366f1] text-white font-black text-lg uppercase tracking-[0.2em] shadow-[0_0_50px_rgba(99,102,241,0.4)] hover:shadow-[0_0_80px_rgba(99,102,241,0.6)] hover:scale-105 transition-all duration-500"
               >
-                <input
-                  required
-                  name="name"
-                  placeholder="Your name"
-                  className={`w-full px-4 py-2 rounded-md ${isDark ? "bg-[#0a0a12] border border-emerald-700/40 text-neutral-200 focus:border-lime-500" : "bg-gray-50 border border-gray-300 text-gray-900 focus:border-green-500"} outline-none transition`}
-                />
-                <input
-                  required
-                  name="email"
-                  type="email"
-                  placeholder="Your email"
-                  className={`w-full px-4 py-2 rounded-md ${isDark ? "bg-[#0a0a12] border border-emerald-700/40 text-neutral-200 focus:border-lime-500" : "bg-gray-50 border border-gray-300 text-gray-900 focus:border-green-500"} outline-none transition`}
-                />
-                <textarea
-                  required
-                  name="message"
-                  rows={5}
-                  placeholder="Your message"
-                  className={`w-full px-4 py-3 rounded-md ${isDark ? "bg-[#0a0a12] border border-emerald-700/40 text-neutral-200 focus:border-lime-500" : "bg-gray-50 border border-gray-300 text-gray-900 focus:border-green-500"} outline-none transition`}
-                />
-                <button
-                  type="submit"
-                  disabled={sending}
-                  className={`px-4 py-2 rounded-md font-semibold ${bgAccent} shadow-lg hover:shadow-lime-500/40 transition-all`}
-                >
-                  {sending ? "Sending..." : "Send Message"}
-                </button>
-              </form>
-            </div>
-          </section>
-        </main>
+                <Mail size={24} /> Initialize Contact
+              </a>
+            </Magnet>
+          </div>
+        </section>
 
-        <footer className={`${isDark ? "border-t border-emerald-800/40 bg-black/40 text-neutral-500" : "border-t border-gray-300 bg-gray-200 text-gray-600"} py-6 text-center text-sm`}>
-          © {new Date().getFullYear()} Rithik Kannaa K — Crafted with React, Tailwind, and Framer Motion
+        {/* --- FOOTER --- */}
+        {/* --- FOOTER --- */}
+        {/* --- FOOTER --- */}
+        <footer className="relative py-24 overflow-hidden">
+          {/* Detailed Background Gradient */}
+          <div className="absolute inset-0 pointer-events-none">
+            <div className="absolute bottom-0 left-0 w-full h-[500px] bg-gradient-to-t from-[#6366f1]/20 to-transparent" />
+            <div className="absolute -bottom-24 -left-24 w-96 h-96 bg-[#6366f1]/30 rounded-full blur-[128px]" />
+            <div className="absolute -bottom-24 -right-24 w-96 h-96 bg-[#ec4899]/20 rounded-full blur-[128px]" />
+          </div>
+
+          <ScrollReveal
+            baseOpacity={0}
+            enableBlur={true}
+            baseRotation={2}
+            blurStrength={10}
+            rotationStrength={5}
+            containerClassName="container mx-auto px-6 max-w-7xl relative z-10"
+          >
+            {/* Top Section: CTA & Brand */}
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 mb-20 items-end">
+              <div className="space-y-8">
+                <h2 className="text-7xl md:text-9xl font-black tracking-tighter text-white leading-[0.8]">
+                  LET'S<br />
+                  <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#6366f1] to-[#ec4899]">CREATE.</span>
+                </h2>
+                <p className="text-2xl font-light text-white/80 max-w-md leading-relaxed">
+                  Merging art, code, and interaction to build the future of the web.
+                </p>
+              </div>
+
+              <div className="flex flex-col gap-6 lg:items-end">
+                <div className="flex gap-4">
+                  {[
+                    { icon: Github, href: CONFIG.GITHUB },
+                    { icon: Linkedin, href: CONFIG.LINKEDIN },
+                    { icon: Mail, href: `mailto:${CONFIG.EMAIL}` }
+                  ].map((social, i) => (
+                    <a
+                      key={i}
+                      href={social.href}
+                      target="_blank"
+                      className="p-5 rounded-2xl bg-white/5 border border-white/10 hover:bg-white/10 hover:scale-110 hover:border-[#6366f1]/50 transition-all duration-300 group"
+                    >
+                      <social.icon size={28} className="text-white group-hover:text-[#6366f1] transition-colors" />
+                    </a>
+                  ))}
+                </div>
+                <a
+                  href={`mailto:${CONFIG.EMAIL}`}
+                  className="text-2xl font-bold tracking-tight hover:text-[#6366f1] transition-colors border-b-2 border-transparent hover:border-[#6366f1] pb-1 w-max"
+                >
+                  {CONFIG.EMAIL}
+                </a>
+              </div>
+            </div>
+
+            <div className="border-t border-white/10 my-12" />
+
+            {/* Middle Section: Links */}
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-10 mb-16">
+              <div>
+                <h4 className="text-sm font-bold uppercase tracking-[0.2em] text-[#6366f1] mb-6">Sitemap</h4>
+                <ul className="space-y-4">
+                  {['Home', 'About', 'Work', 'Tech'].map((item) => (
+                    <li key={item}>
+                      <a href={`#${item.toLowerCase()}`} className="text-lg text-white/60 hover:text-white transition-colors flex items-center gap-2 group">
+                        <span className="w-1.5 h-1.5 rounded-full bg-[#6366f1] group-hover:scale-150 transition-transform" />
+                        {item}
+                      </a>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+
+              <div>
+                <h4 className="text-sm font-bold uppercase tracking-[0.2em] text-[#6366f1] mb-6">Socials</h4>
+                <ul className="space-y-4">
+                  <li><a href={CONFIG.GITHUB} target="_blank" className="text-lg text-white/60 hover:text-white transition-colors">GitHub</a></li>
+                  <li><a href={CONFIG.LINKEDIN} target="_blank" className="text-lg text-white/60 hover:text-white transition-colors">LinkedIn</a></li>
+                  <li><a href="#" className="text-lg text-white/60 hover:text-white transition-colors">Twitter</a></li>
+                </ul>
+              </div>
+
+              <div className="md:col-span-2 bg-white/5 rounded-3xl p-8 border border-white/10 backdrop-blur-sm">
+                <h4 className="text-2xl font-bold text-white mb-2">Location</h4>
+                <p className="text-white/60 mb-6">Based in San Francisco, working globally.</p>
+                <div className="flex items-center gap-3 text-sm font-mono text-[#6366f1] bg-[#6366f1]/10 px-4 py-2 rounded-lg w-max border border-[#6366f1]/20">
+                  <div className="w-2 h-2 rounded-full bg-[#6366f1] animate-pulse" />
+                  OPEN FOR OPPORTUNITIES
+                </div>
+              </div>
+            </div>
+
+            {/* Bottom Bar */}
+            <div className="flex flex-col md:flex-row justify-between items-center gap-6 pt-8 border-t border-white/10">
+              <p className="text-sm font-medium text-white/40 uppercase tracking-widest">
+                © {new Date().getFullYear()} Rithik Kannaa.
+              </p>
+              <div className="flex gap-8 text-sm font-medium text-white/40 uppercase tracking-widest">
+                <span className="hover:text-white cursor-pointer transition-colors">Privacy</span>
+                <span className="hover:text-white cursor-pointer transition-colors">Terms</span>
+              </div>
+            </div>
+          </ScrollReveal>
         </footer>
-      </div>
-    </div>
+
+      </div >
+    </ClickSpark >
   );
 }
