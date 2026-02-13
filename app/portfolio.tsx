@@ -114,41 +114,50 @@ const GALLERY_ITEMS = [
 // Infinite Menu Items (Achievements / Tech Stack)
 const MENU_ITEMS = [
   {
-    image: 'https://blog.jobzella.com/wp-content/uploads/2024/06/software-developer-6521720_1280.jpg',
+    image: 'https://images.unsplash.com/photo-1517694712202-14dd9538aa97?q=80&w=600&h=600&fit=crop&sat=-100',
     link: '#',
     title: 'Software Developer',
     description: 'Passionate about building ideas into real and impactful solutions.'
   },
   {
-    image: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSkHRCG7QdyGJyJTg7y1KGuduUMAv8N8XHDhw&s',
+    image: 'https://images.unsplash.com/photo-1517245386807-bb43f82c33c4?q=80&w=600&h=600&fit=crop&sat=-100',
     link: '#',
     title: 'Hackathon Finalist',
     description: 'Finalist in national-level hackathons with strong teamwork and problem-solving skills.'
   },
   {
-    image: 'https://miro.medium.com/0*vOaWDgTmVpMfi9ws',
+    image: 'https://images.unsplash.com/photo-1555066931-4365d14bab8c?q=80&w=600&h=600&fit=crop&sat=-100',
     link: '#',
     title: 'Vibe Coding',
     description: 'Love experimenting, building, and coding with creativity and flow.'
   },
   {
-    image: 'https://img.freepik.com/free-photo/futuristic-adult-virtual-reality-handsfree-headset-generated-by-ai_188544-26034.jpg?semt=ais_user_personalization&w=740&q=80',
+    image: 'https://images.unsplash.com/photo-1542751371-adc38448a05e?q=80&w=600&h=600&fit=crop&sat=-100',
     link: '#',
     title: 'Gaming & Content',
     description: 'Enjoy gaming, storytelling, and creating engaging digital content.'
   },
   {
-    image: 'https://cdn.dribbble.com/userupload/5352885/file/original-f25604556e01d7efa6466ef0be1ff0e0.jpeg?crop=96x282-1504x1339&format=webp&resize=400x300&vertical=center',
+    image: 'https://images.unsplash.com/photo-1513364776144-60967b0f800f?q=80&w=600&h=600&fit=crop&sat=-100',
     link: '#',
     title: 'Creative Mind',
     description: 'Into drawing, music, and visual design for inspiration and balance.'
   }
 ];
 
+
 export default function Portfolio() {
   const [mounted, setMounted] = useState(false);
   const [activeSection, setActiveSection] = useState('#hero');
+  const [isMobile, setIsMobile] = useState(false);
   const scrollRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const checkMobile = () => setIsMobile(window.innerWidth < 768);
+    checkMobile();
+    window.addEventListener('resize', checkMobile);
+    return () => window.removeEventListener('resize', checkMobile);
+  }, []);
 
   // Section Refs
   const sections: { [key: string]: React.RefObject<HTMLElement | null> } = {
@@ -278,8 +287,8 @@ export default function Portfolio() {
             </h2>
           </div>
           {/* Infinite Menu for Achievements & Identity */}
-          <div className="flex-1 w-full h-[500px] relative mb-20">
-            <InfiniteMenu items={MENU_ITEMS as any} scale={0.8} />
+          <div className="flex-1 w-full h-[400px] md:h-[600px] relative mb-20">
+            <InfiniteMenu items={MENU_ITEMS as any} scale={isMobile ? 0.6 : 0.8} />
           </div>
 
           {/* About Me Paragraph with ScrollReveal */}
@@ -301,6 +310,8 @@ export default function Portfolio() {
                 alt: item.text,
                 title: item.text
               }))}
+              logoHeight={isMobile ? 60 : 100}
+              gap={isMobile ? 40 : 80}
             />
           </div>
         </section>
@@ -308,7 +319,7 @@ export default function Portfolio() {
         {/* --- PROJECTS (Scroll Stack) --- */}
         <section id="work" ref={sections.work} className="py-20">
           <div className="container mx-auto px-6 mb-10">
-            <h2 className="text-5xl md:text-8xl font-black tracking-tighter leading-none mb-4 text-center">
+            <h2 className="text-4xl md:text-8xl font-black tracking-tighter leading-none mb-4 text-center">
               SELECTED <span className="text-gradient-primary">WORKS.</span>
             </h2>
           </div>
@@ -429,10 +440,10 @@ export default function Portfolio() {
         </section>
 
         {/* --- CONTACT --- */}
-        <section id="contact" ref={sections.contact} className="py-40 relative overflow-hidden">
+        <section id="contact" ref={sections.contact} className="py-20 md:py-40 relative overflow-hidden">
           <div className="container mx-auto px-6 relative z-10 max-w-4xl text-center">
             <div className="mb-16">
-              <h2 className="text-6xl md:text-9xl font-black tracking-tighter mb-8">
+              <h2 className="text-4xl md:text-9xl font-black tracking-tighter mb-8">
                 <BlurText
                   text="READY TO BUILD?"
                   animateBy="words"
@@ -448,9 +459,9 @@ export default function Portfolio() {
             <Magnet padding={20} magnetStrength={5}>
               <a
                 href={`mailto:${CONFIG.EMAIL}`}
-                className="inline-flex items-center gap-4 px-12 py-6 rounded-full bg-[#6366f1] text-white font-black text-lg uppercase tracking-[0.2em] shadow-[0_0_50px_rgba(99,102,241,0.4)] hover:shadow-[0_0_80px_rgba(99,102,241,0.6)] hover:scale-105 transition-all duration-500"
+                className="inline-flex items-center gap-4 px-8 md:px-12 py-4 md:py-6 rounded-full bg-[#6366f1] text-white font-black text-base md:text-lg uppercase tracking-[0.2em] shadow-[0_0_50px_rgba(99,102,241,0.4)] hover:shadow-[0_0_80px_rgba(99,102,241,0.6)] hover:scale-105 transition-all duration-500"
               >
-                <Mail size={24} /> Initialize Contact
+                <Mail size={isMobile ? 20 : 24} /> Initialize Contact
               </a>
             </Magnet>
           </div>
@@ -478,7 +489,7 @@ export default function Portfolio() {
             {/* Top Section: CTA & Brand */}
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 mb-20 items-end">
               <div className="space-y-8">
-                <h2 className="text-7xl md:text-9xl font-black tracking-tighter text-white leading-[0.8]">
+                <h2 className="text-5xl md:text-9xl font-black tracking-tighter text-white leading-[0.8]">
                   LET'S<br />
                   <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#6366f1] to-[#ec4899]">CREATE.</span>
                 </h2>
