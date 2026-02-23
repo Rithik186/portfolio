@@ -5,7 +5,7 @@ import { motion } from "framer-motion";
 import {
   Github, Linkedin, Mail, Youtube, Zap, Trophy, Flame, Layout, ExternalLink,
   Code2, Cpu, Shield, FolderOpen, Terminal, Sparkles, Layers,
-  Database, Server, Globe, Lock, Workflow, Box
+  Database, Server, Globe, Lock, Workflow, Box, Menu, X
 } from "lucide-react";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
@@ -88,7 +88,7 @@ const PROJECTS = [
     accent: "#ec4899", // Pink
     icon: Car,
     github: "https://github.com/Rithik186/ELITE",
-    demo: null,
+    demo: "https://elite-car-showroom.vercel.app/",
     featured: false
   }
 ];
@@ -149,16 +149,25 @@ const MENU_ITEMS = [
 
 export default function Portfolio() {
   const [mounted, setMounted] = useState(false);
-  const [activeSection, setActiveSection] = useState('#hero');
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isMobile, setIsMobile] = useState(false);
+  const [activeSection, setActiveSection] = useState('#hero');
   const scrollRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    const checkMobile = () => setIsMobile(window.innerWidth < 768);
+    const checkMobile = () => setIsMobile(window.innerWidth < 1024); // Use 1024 for navigation breakpoint
     checkMobile();
     window.addEventListener('resize', checkMobile);
     return () => window.removeEventListener('resize', checkMobile);
   }, []);
+
+  const navItems = [
+    { label: 'Home', href: '#hero', key: 'hero' },
+    { label: 'About', href: '#about', key: 'about' },
+    { label: 'Work', href: '#work', key: 'work' },
+    { label: 'Tech', href: '#tech', key: 'tech' },
+    { label: 'Contact', href: '#contact', key: 'contact' },
+  ];
 
   // Section Refs
   const sections: { [key: string]: React.RefObject<HTMLElement | null> } = {
@@ -211,29 +220,76 @@ export default function Portfolio() {
           <DarkVeil />
         </div>
 
-        {/* --- PILL NAVIGATION --- */}
-        <div className="fixed top-6 left-0 w-full z-50 flex justify-center pointer-events-none">
-          <div className="pointer-events-auto transform scale-110">
-            {/* scale-110 to slightly increase size as requested */}
-            <PillNav
-              logo="https://github.com/Rithik186.png"
-              logoAlt="Rithik"
-              items={[
-                { label: 'Home', href: '#hero', ariaLabel: 'Home' },
-                { label: 'About', href: '#about', ariaLabel: 'About' },
-                { label: 'Work', href: '#work', ariaLabel: 'Work' },
-                { label: 'Tech', href: '#tech', ariaLabel: 'Tech' },
-                { label: 'Contact', href: '#contact', ariaLabel: 'Contact' },
-              ]}
-              onMobileMenuClick={() => { }}
-              pillColor="#ffffff"
-              baseColor="#000000"
-              hoveredPillTextColor="#6366f1"
-              pillTextColor="#000000"
-              activeHref={activeSection}
-            />
+        {/* --- DESKTOP NAVIGATION: PILL NAV --- */}
+        {!isMobile && (
+          <div className="fixed top-6 left-0 w-full z-100 flex justify-center pointer-events-none">
+            <div className="pointer-events-auto transform scale-110">
+              <PillNav
+                logo="https://github.com/Rithik186.png"
+                logoAlt="Rithik"
+                items={navItems}
+                onMobileMenuClick={() => { }}
+                pillColor="#ffffff"
+                baseColor="#000000"
+                hoveredPillTextColor="#6366f1"
+                pillTextColor="#000000"
+                activeHref={activeSection}
+              />
+            </div>
           </div>
-        </div>
+        )}
+
+        {/* --- MOBILE NAVIGATION: BURGER MENU --- */}
+        {isMobile && (
+          <>
+            <nav className="fixed top-0 left-0 w-full z-[100] px-6 py-6 flex justify-between items-center pointer-events-none">
+              <div className="pointer-events-auto">
+                <a href="#hero" className="flex items-center gap-3 group">
+                  <div className="w-10 h-10 rounded-full overflow-hidden border-2 border-[#6366f1]/50 group-hover:border-[#6366f1] transition-all">
+                    <img src="https://github.com/Rithik186.png" alt="Rithik" className="w-full h-full object-cover" />
+                  </div>
+                  <span className="text-xl font-black tracking-tighter text-white">RK.</span>
+                </a>
+              </div>
+
+              <div className="pointer-events-auto">
+                <button
+                  onClick={() => setIsMenuOpen(!isMenuOpen)}
+                  className="p-3 rounded-2xl bg-white/5 border border-white/10 text-white"
+                >
+                  {isMenuOpen ? <X size={24} /> : <Menu size={24} />}
+                </button>
+              </div>
+            </nav>
+
+            {/* Sliding Mobile Menu Overlay */}
+            <div className={`fixed inset-0 z-[90] bg-black/95 backdrop-blur-xl transition-transform duration-500 ${isMenuOpen ? 'translate-x-0' : 'translate-x-full'}`}>
+              <div className="flex flex-col items-center justify-center h-full gap-10">
+                {navItems.map((item) => (
+                  <a
+                    key={item.key}
+                    href={item.href}
+                    onClick={() => setIsMenuOpen(false)}
+                    className="text-4xl font-black tracking-tighter text-white hover:text-[#6366f1] transition-colors"
+                  >
+                    {item.label}
+                  </a>
+                ))}
+                <div className="flex gap-6 mt-10">
+                  {[
+                    { icon: Github, href: CONFIG.GITHUB },
+                    { icon: Linkedin, href: CONFIG.LINKEDIN },
+                    { icon: Youtube, href: CONFIG.YOUTUBE }
+                  ].map((social, i) => (
+                    <a key={i} href={social.href} target="_blank" className="p-4 rounded-full bg-white/5 border border-white/10 text-white">
+                      <social.icon size={24} />
+                    </a>
+                  ))}
+                </div>
+              </div>
+            </div>
+          </>
+        )}
 
         {/* --- HERO SECTION --- */}
         <section id="hero" ref={sections.hero} className="relative min-h-screen flex flex-col items-center justify-center px-6 pt-20">
@@ -289,9 +345,21 @@ export default function Portfolio() {
             </h2>
           </div>
           {/* Infinite Menu for Achievements & Identity */}
-          <div className="flex-1 w-full h-[400px] md:h-[600px] relative mb-20">
+          <div className="flex-1 w-full h-[400px] md:h-[600px] relative mb-10">
             <InfiniteMenu items={MENU_ITEMS as any} scale={isMobile ? 0.6 : 0.8} />
           </div>
+
+          {/* Mobile Guide Text */}
+          {isMobile && (
+            <div className="flex justify-center mb-10">
+              <div className="flex items-center gap-2 px-6 py-3 rounded-full bg-[#6366f1]/10 border border-[#6366f1]/20 animate-pulse">
+                <span className="w-2 h-2 rounded-full bg-[#6366f1]" />
+                <span className="text-xs font-bold uppercase tracking-widest text-[#6366f1]">
+                  Hold & Drag to Explore
+                </span>
+              </div>
+            </div>
+          )}
 
           {/* About Me Paragraph with ScrollReveal */}
         </section>
