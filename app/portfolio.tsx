@@ -311,7 +311,7 @@ export default function Portfolio() {
 
             <FadeContent delay={800} blur={true}>
               <p className="text-xl md:text-2xl font-light text-white/60 tracking-wide max-w-2xl mx-auto">
-                Architecting Next-Gen IoT & Scalable Web Systems
+                Full Stack Developer | Architecting Scalable Web & App Experiences
               </p>
 
               <div className="flex items-center gap-6 mt-8">
@@ -339,27 +339,30 @@ export default function Portfolio() {
 
         {/* --- ABOUT & ACHIEVEMENTS (Infinite Menu) --- */}
         <section id="about" ref={sections.about} className="py-20 relative min-h-screen flex flex-col">
-          <div className="container mx-auto px-6 mb-10">
-            <h2 className="text-4xl md:text-6xl font-black tracking-tighter mb-4 text-center">
+          <div className="container mx-auto px-6 mb-4">
+            <h2 className="text-4xl md:text-6xl font-black tracking-tighter mb-8 text-center">
               <ShinyText text="WHO AM I" speed={3} />
             </h2>
+
+            {/* Catchy Guide Text */}
+            <div className="flex justify-center mb-2 relative z-50">
+              <div className="flex items-center gap-4 px-8 py-4 rounded-[2rem] bg-[#0a0a0a] border-2 border-[#6366f1]/80 shadow-[0_0_40px_rgba(99,102,241,0.4)] backdrop-blur-xl animate-bounce">
+                <span className="flex h-4 w-4 relative">
+                  <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-[#6366f1] opacity-80"></span>
+                  <span className="relative inline-flex rounded-full h-4 w-4 bg-[#6366f1]"></span>
+                </span>
+                <span className="text-sm md:text-lg font-black uppercase tracking-[0.2em] text-[#6366f1] drop-shadow-md">
+                  Hold Left Click & Move Mouse To Explore
+                </span>
+              </div>
+            </div>
           </div>
           {/* Infinite Menu for Achievements & Identity */}
           <div className="flex-1 w-full h-[400px] md:h-[600px] relative mb-10">
             <InfiniteMenu items={MENU_ITEMS as any} scale={isMobile ? 0.6 : 0.8} />
           </div>
 
-          {/* Mobile Guide Text */}
-          {isMobile && (
-            <div className="flex justify-center mb-10">
-              <div className="flex items-center gap-2 px-6 py-3 rounded-full bg-[#6366f1]/10 border border-[#6366f1]/20 animate-pulse">
-                <span className="w-2 h-2 rounded-full bg-[#6366f1]" />
-                <span className="text-xs font-bold uppercase tracking-widest text-[#6366f1]">
-                  Hold & Drag to Explore
-                </span>
-              </div>
-            </div>
-          )}
+
 
           {/* About Me Paragraph with ScrollReveal */}
         </section>
@@ -461,14 +464,14 @@ export default function Portfolio() {
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                     <div className="bg-[#111] rounded-2xl p-4 border border-white/5">
                       <img
-                        src="https://github-readme-stats.vercel.app/api?username=Rithik186&show_icons=true&theme=dark&hide_border=true&bg_color=00000000&rank_icon=github&count_private=true"
+                        src="https://github-readme-stats-eight-theta.vercel.app/api?username=Rithik186&show_icons=true&theme=dark&hide_border=true&bg_color=00000000&rank_icon=github&count_private=true"
                         alt="GitHub Stats"
                         className="w-full"
                       />
                     </div>
                     <div className="bg-[#111] rounded-2xl p-4 border border-white/5 flex items-center justify-center">
                       <img
-                        src="https://github-readme-stats.vercel.app/api/top-langs/?username=Rithik186&layout=compact&theme=dark&hide_border=true&bg_color=00000000&hide=jupyter%20notebook"
+                        src="https://github-readme-stats-eight-theta.vercel.app/api/top-langs/?username=Rithik186&layout=compact&theme=dark&hide_border=true&bg_color=00000000&hide=jupyter%20notebook"
                         alt="Top Langs"
                         className="w-full"
                       />
@@ -498,7 +501,7 @@ export default function Portfolio() {
 
                   <div className="flex-1 bg-[#111] rounded-2xl p-6 border border-white/5 flex items-center justify-center">
                     <img
-                      src="https://leetcode-stats-six.vercel.app/?username=rithik186&theme=dark&no-border=true"
+                      src="https://leetcard.jacoblin.cool/rithik186?theme=dark&font=Syne&ext=heatmap"
                       alt="LeetCode Stats"
                       className="w-full h-auto"
                     />
